@@ -1,0 +1,23 @@
+# Configuration pour le profil dev
+# Spring Boot sait que c'est pour 'dev' grâce au nom du fichier
+
+scylla:
+  contact-points: localhost  # Utiliser localhost au lieu de scylla-search
+  port: 9043
+  keyspace: search_data_dev
+  datacenter: datacenter1
+  replication-factor: 1
+  schema:
+    auto-create: true
+
+elasticsearch:
+  host: localhost
+  port: 9200
+  index:
+    name: search_documents_dev
+
+logging:
+  level:
+    com.company.search: DEBUG
+    com.datastax: DEBUG
+    org.elasticsearch: INFO

@@ -1,0 +1,136 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: search-service
+  profiles:
+    active: dev
+  main:
+    allow-bean-definition-overriding: true
+  # Configuration Jackson
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false
+      adjust-dates-to-context-time-zone: false
+    default-property-inclusion: non_null
+  # Configuration Spring Cassandra
+  cassandra:
+    contact-points: localhost
+    port: 9042  # Port standard pour Cassandra/ScyllaDB
+    keyspace-name: search_data_dev
+    local-datacenter: datacenter1
+  # Configuration for Elasticsearch Spring Data
+  data:
+    elasticsearch:
+      index-name: search_documents_dev
+  # Configuration pour les pools de threads
+  task:
+    execution:
+      pool:
+        core-size: 8
+        max-size: 16
+        queue-capacity: 100
+    scheduling:
+      pool:
+        size: 4
+  # Configuration pour la validation
+  validation:
+    mode: auto
+
+# ScyllaDB Configuration
+scylla:
+  contact-points: localhost
+  port: 9042  # Aligné avec spring.cassandra.port
+  keyspace: search_data_dev
+  datacenter: datacenter1
+  replication-factor: 1
+  schema:
+    auto-create: true
+
+# Elasticsearch Configuration
+elasticsearch:
+  host: localhost
+  port: 9200
+  scheme: http
+  index:
+    name: search_documents_dev
+  connection:
+    timeout: 5000
+    socket-timeout: 30000
+
+# Logging
+logging:
+  level:
+    com.company.search: DEBUG
+    org.springframework: INFO
+    com.datastax: INFO
+    org.elasticsearch: DEBUG
+    com.fasterxml.jackson: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/search-service.log
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env
+  endpoint:
+    health:
+      show-details: always
+
+---
+# Configuration pour le profil dev
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+# Paramètres spécifiques au développement
+scylla:
+  schema:
+    auto-create: true
+
+elasticsearch:
+  index:
+    name: search_documents_dev
+
+logging:
+  level:
+    com.company.search: DEBUG
+    com.fasterxml.jackson: DEBUG
+
+---
+# Configuration pour le profil prod
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+# Paramètres spécifiques à la production
+scylla:
+  contact-points: ${SCYLLA_HOST:localhost}
+  port: ${SCYLLA_PORT:9042}
+  keyspace: search_data_prod
+  schema:
+    auto-create: false
+
+elasticsearch:
+  host: ${ELASTICSEARCH_HOST:localhost}
+  port: ${ELASTICSEARCH_PORT:9200}
+  index:
+    name: search_documents_prod
+
+logging:
+  level:
+    com.company.search: INFO
+    org.elasticsearch: WARN
+    com.datastax: WARN
+    com.fasterxml.jackson: WARN

@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+
+# Environnement
+.env*
+!.env.example
+
+# Cache
+.cache/
+
+# Logs
+*.log
+
+# Système
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Fichiers de build
+dist/
+*.tsbuildinfo
+
+# Autres fichiers/dossiers spécifiques
+**/node_modules/
+# Fichiers de build Java
+/target/
+*.jar
+
+# Fichiers binaires Node.js
+node_modules/@next/swc-*

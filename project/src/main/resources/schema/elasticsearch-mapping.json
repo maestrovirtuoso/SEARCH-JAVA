@@ -1,0 +1,68 @@
+{
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "standard",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          },
+          "suggest": {
+            "type": "completion"
+          }
+        }
+      },
+      "content": {
+        "type": "text",
+        "analyzer": "standard"
+      },
+      "category": {
+        "type": "keyword"
+      },
+      "author": {
+        "type": "text",
+        "analyzer": "standard",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "metadata": {
+        "type": "object",
+        "enabled": true
+      },
+      "createdAt": {
+        "type": "date",
+        "format": "strict_date_optional_time||epoch_millis"
+      },
+      "updatedAt": {
+        "type": "date",
+        "format": "strict_date_optional_time||epoch_millis"
+      }
+    }
+  },
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1,
+    "analysis": {
+      "analyzer": {
+        "custom_search_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase", "stop", "stemmer"]
+        }
+      },
+      "filter": {
+        "stemmer": {
+          "type": "stemmer",
+          "language": "english"
+        }
+      }
+    }
+  }
+}
