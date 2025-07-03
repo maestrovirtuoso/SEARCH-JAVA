@@ -47,4 +47,4 @@ project/target/
 *.jar
 
 # Fichiers binaires Node.js
-node_modules/@next/swc-*
+node_modules/@next/swc-*node_modules/
